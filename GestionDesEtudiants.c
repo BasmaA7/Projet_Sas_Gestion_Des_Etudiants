@@ -85,6 +85,19 @@ void afficher_departement() {
 }
 
 // CRUD Étudiant
+
+
+
+
+int verifier_departement_existe(char departement[]) {
+    for (int i = 0; i < nb_departements; i++) {
+        if (strcmp(liste_departements[i].nom_departement, departement) == 0) {
+            return 1;
+        }
+    }
+    return 0; 
+}
+
 void ajouter_etudiant() {
     if (nb_etudiants >= MAX_ETUDIANTS) {
         printf("Capacité maximale des étudiants atteinte.\n");
@@ -93,28 +106,38 @@ void ajouter_etudiant() {
 
     struct Etudiant nouveau_etudiant;
 
-    nouveau_etudiant.numero_unique = prochain_id_etudiant++; 
+    nouveau_etudiant.numero_unique = prochain_id_etudiant++;
 
     printf("Entrez le nom : ");
     getchar(); 
     fgets(nouveau_etudiant.nom, sizeof(nouveau_etudiant.nom), stdin);
-    
     nouveau_etudiant.nom[strcspn(nouveau_etudiant.nom, "\n")] = '\0';
 
     printf("Entrez le prénom : ");
     fgets(nouveau_etudiant.prenom, sizeof(nouveau_etudiant.prenom), stdin);
-    
     nouveau_etudiant.prenom[strcspn(nouveau_etudiant.prenom, "\n")] = '\0';
 
     printf("Entrez la date de naissance (jj/mm/aaaa) : ");
     fgets(nouveau_etudiant.date_naissance, sizeof(nouveau_etudiant.date_naissance), stdin);
-   
     nouveau_etudiant.date_naissance[strcspn(nouveau_etudiant.date_naissance, "\n")] = '\0';
 
-    printf("Entrez le département : ");
-    fgets(nouveau_etudiant.departement, sizeof(nouveau_etudiant.departement), stdin);
-    
-    nouveau_etudiant.departement[strcspn(nouveau_etudiant.departement, "\n")] = '\0';
+    char departement[100];
+    int departement_valide = 0;
+
+    while (!departement_valide) {
+        printf("Entrez le département : ");
+        fgets(departement, sizeof(departement), stdin);
+        departement[strcspn(departement, "\n")] = '\0';
+
+        if (verifier_departement_existe(departement)) {
+            strncpy(nouveau_etudiant.departement, departement, sizeof(nouveau_etudiant.departement) - 1);
+            nouveau_etudiant.departement[sizeof(nouveau_etudiant.departement) - 1] = '\0';
+            departement_valide = 1;
+        } else {
+            printf("Département non trouvé. Voici la liste des départements existants :\n");
+            afficher_departement(); 
+        }
+    }
 
     printf("Entrez la note générale : ");
     scanf("%f", &nouveau_etudiant.note_generale);
@@ -122,6 +145,7 @@ void ajouter_etudiant() {
     list_etudiants[nb_etudiants++] = nouveau_etudiant;
     printf("Étudiant ajouté avec succès. ID unique : %d\n", nouveau_etudiant.numero_unique);
 }
+
 
 void afficher_etudiants() {
     if (nb_etudiants == 0) {
