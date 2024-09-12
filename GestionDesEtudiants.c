@@ -50,27 +50,21 @@ void supprimer_departement() {
 
     char nom[100];
     printf("Entrez le nom du département à supprimer : ");
-    scanf("%s", nom);
-
+    scanf("%s", nom); 
     int i;
     for (i = 0; i < nb_departements; i++) {
         if (strcmp(liste_departements[i].nom_departement, nom) == 0) {
-            break;
+            for (int j = i; j < nb_departements - 1; j++) {
+                liste_departements[j] = liste_departements[j + 1];
+            }
+            nb_departements--;
+            printf("Département supprimé avec succès.\n");
+            return;
         }
     }
 
-    if (i == nb_departements) {
-        printf("Département non trouvé.\n");
-        return;
-    }
-
-    for (int j = i; j < nb_departements - 1; j++) {
-        liste_departements[j] = liste_departements[j + 1];
-    }
-    nb_departements--;
-    printf("Département supprimé avec succès.\n");
+    printf("Département non trouvé.\n");
 }
-
 void afficher_departement() {
     if (nb_departements == 0) {
         printf("Aucun département à afficher.\n");
@@ -174,25 +168,23 @@ void supprimer_etudiant() {
     printf("Entrez le numéro unique de l'étudiant à supprimer : ");
     scanf("%d", &numero_unique);
 
+   
     int i;
     for (i = 0; i < nb_etudiants; i++) {
         if (list_etudiants[i].numero_unique == numero_unique) {
-            break;
+           
+            for (int j = i; j < nb_etudiants - 1; j++) {
+                list_etudiants[j] = list_etudiants[j + 1];
+            }
+            nb_etudiants--;
+            printf("Étudiant supprimé avec succès.\n");
+            return;
         }
     }
 
-    if (i == nb_etudiants) {
-        printf("Étudiant non trouvé.\n");
-        return;
-    }
-
-    for (int j = i; j < nb_etudiants - 1; j++) {
-        list_etudiants[j] = list_etudiants[j + 1];
-    }
-    nb_etudiants--;
-    printf("Étudiant supprimé avec succès.\n");
+    
+    printf("Étudiant non trouvé.\n");
 }
-
 
 void modifier_etudiant() {
     if (nb_etudiants == 0) {
